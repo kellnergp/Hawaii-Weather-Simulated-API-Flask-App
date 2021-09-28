@@ -94,6 +94,8 @@ Close the session and return a jsonified version of the list.
 
 Establish a route for a 'tobs' query of the most active station for the last year of data using flask.
 
+Create a session link to the database with the SQLAlchemy Session() function.
+
 Follow the steps from query (2) to determine the most active station and save the result.
 
 Repeat the steps from the Precipitation Analysis section to find the start date for the last year of data.
@@ -105,3 +107,25 @@ Use a for loop to save the results of the query in the form of a list of 'date':
 Close the session and return the list in jsonified form.
 
 ### '/api/v1.0/\<start>/' Route and '/api/v1.0/\<start>/\<end> ' Route
+
+Establish routes for \<start> and \<start>/\<end> routes with both routes calling the same function.
+
+Define the temp() function to have start and end as inputs, with end having a default value of 'None'.
+
+The routes and function may only accept inputs in the format of 'YYYY-MM-DD'.
+
+Create a session link to the database with the SQLAlchemy Session() function.
+
+Use a conditional statement with a condition of end not equal to None.
+
+Within the if statement, convert start and end to datetime objects with the format '%Y-%m-%d'.
+
+Query func.min(), func.avg(), and func.max() for Measurement.tobs, filtering for Measurement.date greater than or equal to start date and Measurement.date less than or equal to the end date, and save the results as temp_results.
+
+Within an else statement, convert start to a datetime object with the format '%Y-%m-%d'.
+
+Query func.min(), func.avg(), and func.max() for Measurement.tobs, filtering for Measurement.date greater than or equal to start date, and save the results as temp_results.
+
+After the conditional statements, store the results in a list object as key-value pairs with the keys being 'TMIN', 'TAVG', and 'TMAX' and the values being the corresponding query results.
+
+Close the session and return the list in jsonified form.
