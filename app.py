@@ -20,7 +20,7 @@ Base.prepare(engine, reflect=True)
 
 # Save references to each table
 Measurement = Base.classes.measurement
-Station = Base.classes.measurement
+Station = Base.classes.station
 
 ## flask setup
 app = Flask(__name__)
@@ -63,8 +63,34 @@ def precipitation():
     
     # close session
     session.close()
-
+    
+    # return JSON dictionary
     return jsonify(prcp_dict)
+
+# define stations route
+@app.route("/api/v1.0/stations")
+def stations():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+    
+    """Return a JSON list of stations from the dataset"""
+    # query station identifiers and names from the table
+    station_results = session.query(Station.station, Station.name)
+    
+    # generate list of all stations
+    station_list = [{'Station ID':'Station Name'}]
+    
+    for  station, name in station_results:
+        stat_dict = {station:name}
+        
+        if stat_dict not in station_list:
+            station_list.append(stat_dict)
+            
+    # close session
+    session.close()
+    
+    # return JSON list of stations
+    return jsonify(station_list)
 
 if __name__ == "__main__":
     app.run(debug=True)
