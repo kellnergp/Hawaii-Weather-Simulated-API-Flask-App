@@ -2,6 +2,8 @@
 
 ## Climate Analysis and Exploration
 
+Jupyter Notebook: https://github.com/kellnergp/sqlalchemy-challenge/blob/main/climate_gpk.ipynb
+
 Create a Jupyter Notebook file and import dependencies, including matplotlib.pyplot, pandas, datetime, and SQLAlchemy.
 
 Use SQLAlchemy.create_engine to connect to the hawaii.sqlite database.
@@ -56,6 +58,8 @@ Close the session before continuing to the next section.
 
 ## Climate App
 
+App Code: https://github.com/kellnergp/sqlalchemy-challenge/blob/main/app.py
+
 Import Flask as well as all dependencies from the Notebook section.
 
 Follow the same steps as the Notebook section to establish a connection to the database, reflect the tables, and save references to them.
@@ -64,7 +68,11 @@ Create a series of routes to hold various queries from the database.
 
 ### '/' Route
 
-Establish a home route that returns a list of all routes available within the app.
+Establish a home route with flask.
+
+Use flask.escape() function to render the \<start> and \<end> components of the final routes printable strings.
+
+Return a list of all available routes.
 
 ### '/api/v1.0/precipitation' Route
 
