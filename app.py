@@ -136,24 +136,33 @@ def tobs():
     #return JSON list of tobs values
     return jsonify(tobs_list)
 
+# set up start temperature route
+@app.route("/api/v1.0/<start>/")
+
 # set up start/end temperature route
 @app.route("/api/v1.0/<start>/<end>")
-def temp(start=None, end=None):
+def temp(start, end=None):
     # Create our session (link) from Python to the DB
     session = Session(engine)
     
-    if start != None and end != None:
+    # conditional if an end is input
+    if end != None:
+        # convert inputs to datetime objects
         s_date = dt.datetime.strptime(start, '%Y-%m-%d')
         e_date = dt.datetime.strptime(end, '%Y-%m-%d')
         
+        # query TMIN, TAVG, and TMAX for dates between the start and end date inclusive
         temp_results = session.query(func.min(Measurement.tobs),\
                        func.avg(Measurement.tobs),\
                        func.max(Measurement.tobs))\
                         .filter(Measurement.date >= s_date).filter(Measurement.date <= e_date)
     
-    elif start != None:
+    # if there is no end input
+    else:
+        # convert start to datetime object
         s_date = dt.datetime.strptime(start, '%Y-%m-%d')
         
+        # query TMIN, TAVG, and TMAX for all dates greater than and equal to the start date
         temp_results = session.query(func.min(Measurement.tobs),\
                        func.avg(Measurement.tobs),\
                        func.max(Measurement.tobs))\
