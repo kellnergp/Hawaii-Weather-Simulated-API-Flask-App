@@ -103,7 +103,10 @@ def tobs():
     
     """Query the dates and temperature observations of the most active station for the last year of data"""
     # save the last date in the data
-    recent_date = dt.datetime(2017, 8, 23)
+    recent_date_str = session.query(func.max(Measurement.date)).all()[0][0]
+    
+    # convert to datetime object
+    recent_date = dt.datetime.strptime(recent_date_str, '%Y-%m-%d')
     
     # determine date 1 year prior
     start_date = recent_date - dt.timedelta(days=365)
@@ -135,14 +138,35 @@ def tobs():
 
 # set up start/end temperature route
 @app.route("/api/v1.0/<start>/<end>")
-def temp():
+def temp(start=None, end=None):
     # Create our session (link) from Python to the DB
     session = Session(engine)
+    
+    if start != None and end != None:
+        s_date = dt.datetime.strptime(start, '%Y-%m-%d')
+        e_date = dt.datetime.strptime(end, '%Y-%m-%d')
+        
+        temp_results = session.query(func.min(Measurement.tobs),\
+                       func.avg(Measurement.tobs),\
+                       func.max(Measurement.tobs))\
+                        .filter(Measurement.date >= s_date).filter(Measurement.date <= e_date)
+    
+    elif start != None:
+        s_date = dt.datetime.strptime(start, '%Y-%m-%d')
+        
+        temp_results = session.query(func.min(Measurement.tobs),\
+                       func.avg(Measurement.tobs),\
+                       func.max(Measurement.tobs))\
+                        .filter(Measurement.date >= s_date)
+    
+    # store results in list
+    temp_list = [{'TMIN':temp_results[0][0]}, {'TAVG':temp_results[0][1]}, {'TMAX':temp_results[0][2]}] 
     
     # close session
     session.close()
     
-    return "placeholder"
+    # return JSON list of temp results
+    return jsonify(temp_list)
 
 if __name__ == "__main__":
     app.run(debug=True)
