@@ -20,7 +20,7 @@ Convert the date to a datetime object with the datetime.datetime.strptime() func
 
 Calculate the date on year prior to the end of the dataset by subtracting datetime.timedelta(days=365) from the most recent date.
 
-Perform a session query for the 'date' and 'prcp' columns from Measurement table, filtering for dates greater than or equal to the calculated start date.
+Perform a session query (1) for the 'date' and 'prcp' columns from Measurement table, filtering for dates greater than or equal to the calculated start date.
 
 Save the query results into a list with a list comprehension then use the list to form a Pandas dataframe.
 
@@ -38,11 +38,11 @@ Finally, use the Pandas describe() function to print the summary statistics for 
 
 Use a session query to determine the number of stations in the dataset by calling the 'station' column from the Station table, grouping by 'station', and using the count() function.
 
-Create a query to find the most active station by calling Station.station and func.count(Measurement.id), joining the tables on 'station', grouping by 'station', and sorting by the func.count(), descending.
+Create a query (2) to find the most active station by calling Station.station and func.count(Measurement.id), joining the tables on 'station', grouping by 'station', and sorting by the func.count(), descending.
 
 Save the top result's station.
 
-Query func.min(), func.max(), and func.avg() for the 'tobs' column from the Measurement table, filtering for rows where the 'station' is equal to the saved station.
+Query (3) func.min(), func.max(), and func.avg() for the 'tobs' column from the Measurement table, filtering for rows where the 'station' is equal to the saved station.
 
 Using the start date from the previous section and the saved station from this section as filters, query 'tobs' data from the Measurement table.
 
@@ -53,3 +53,55 @@ Use the Pandas plot().hist() function to create a graph of temperature frequency
 ![Image of temperature frequency table](https://github.com/kellnergp/sqlalchemy-challenge/blob/main/Images/tempFrequency.png?raw=true)
 
 Close the session before continuing to the next section.
+
+## Climate App
+
+Import Flask as well as all dependencies from the Notebook section.
+
+Follow the same steps as the Notebook section to establish a connection to the database, reflect the tables, and save references to them.
+
+Create a series of routes to hold various queries from the database.
+
+### '/' Route
+
+Establish a home route that returns a list of all routes available within the app.
+
+### '/api/v1.0/precipitation' Route
+
+Establish a route to return the results of the precipitation query from the Notebook section.
+
+Create a session link to the database with the SQLAlchemy Session() function.
+
+Repeat the steps to generate query (1) and save the results into a list.
+
+Use a for loop to save the results into a dictionary, with the 'date' as key and 'prcp' as value.
+
+Close the session and return the dictionary in jsonified form.
+
+### '/api/v1.0/stations' Route
+
+Use flask syntax to create a route for a 'stations' query.
+
+Create a session link to the database with the SQLAlchemy Session() function.
+
+Use a session query of Station.station and Station.name to find all stations within the dataset.
+
+Generate a list of 'station identifier':'station name' pairs using a list comprehension.
+
+Close the session and return a jsonified version of the list.
+
+### '/api/v1.0/tobs' Route
+
+Establish a route for a 'tobs' query of the most active station for the last year of data using flask.
+
+Follow the steps from query (2) to determine the most active station and save the result.
+
+Repeat the steps from the Precipitation Analysis section to find the start date for the last year of data.
+
+Query Measurement.date and Measurement.tobs, filtering for date greater than or equal to the start date and for station matching the saved station.
+
+Use a for loop to save the results of the query in the form of a list of 'date':'tobs' pairs.
+
+Close the session and return the list in jsonified form.
+
+### '/api/v1.0/\<start>/' Route and '/api/v1.0/\<start>/\<end> ' Route
