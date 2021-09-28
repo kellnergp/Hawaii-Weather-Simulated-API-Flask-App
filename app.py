@@ -92,5 +92,43 @@ def stations():
     # return JSON list of stations
     return jsonify(station_list)
 
+# set up tobs route
+@app.route("/api/v1.0/tobs")
+def tobs():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+    
+    """Query the dates and temperature observations of the most active station for the last year of data"""
+    # save the last date in the data
+    recent_date = dt.datetime(2017, 8, 23)
+    
+    # determine date 1 year prior
+    start_date = recent_date - dt.timedelta(days=365)
+    
+    # List the stations and the counts of rows of data in descending order.
+    s_list = session.query(Station.station, func.count(Measurement.id)).join(Measurement, Measurement.station==Station.station)\
+                            .group_by(Station.station).order_by(func.count(Station.id).desc()).all()
+    
+    # save value of most active station id
+    active_station = s_list[0][0]
+    
+    # Query the last 12 months of temperature observation data for this station and plot the results as a histogram
+    tobs_results = session.query(Measurement.date, Measurement.tobs).filter(Measurement.date >= start_date)\
+                                            .filter(Measurement.station == active_station)\
+                                            .order_by(Measurement.date)
+    
+    # save list of temperature observations (TOBS) for the previous year
+    tobs_list = [{'Date':'Temperature'}]
+    
+    for result in tobs_results:
+        tobs_dict = {result[0]:result[1]}
+        tobs_list.append(tobs_dict)
+    
+    # close session
+    session.close()
+    
+    #return JSON list of tobs values
+    return jsonify(tobs_list)
+
 if __name__ == "__main__":
     app.run(debug=True)
