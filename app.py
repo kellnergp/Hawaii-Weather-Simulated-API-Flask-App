@@ -1,5 +1,5 @@
 # import dependencies
-from flask import Flask, jsonify
+from flask import Flask, jsonify, escape
 import numpy as np
 import pandas as pd
 import datetime as dt
@@ -30,15 +30,20 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     """List all available api routes."""
+    # use escape function to make html tags printable
+    start = escape("<start>")
+    end = escape("<end>")
+    
+    # return list of routes
     return (
         f"Available Routes:<br/>"
         f"-----------------<br/>"
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/[start]/<br/>" 
+        f"/api/v1.0/{start}/<br/>" 
         f"(/api/v1.0/YYYY-MM-DD/)<br/>"
-        f"/api/v1.0/[start]/[end]<br/>" 
+        f"/api/v1.0/{start}/{end}<br/>" 
         f"(/api/v1.0/YYYY-MM-DD/YYYY-MM-DD)"
     )
 
