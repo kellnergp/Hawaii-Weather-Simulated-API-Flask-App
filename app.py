@@ -47,7 +47,10 @@ def precipitation():
     
     """Return a list of precipitation values for the last 12 months of data"""
     # save the last date in the data
-    recent_date = dt.datetime(2017, 8, 23)
+    recent_date_str = session.query(func.max(Measurement.date)).all()[0][0]
+    
+    # convert to datetime object
+    recent_date = dt.datetime.strptime(recent_date_str, '%Y-%m-%d')
     
     # determine date 1 year prior
     start_date = recent_date - dt.timedelta(days=365)
@@ -129,6 +132,17 @@ def tobs():
     
     #return JSON list of tobs values
     return jsonify(tobs_list)
+
+# set up start/end temperature route
+@app.route("/api/v1.0/<start>/<end>")
+def temp():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+    
+    # close session
+    session.close()
+    
+    return "placeholder"
 
 if __name__ == "__main__":
     app.run(debug=True)
