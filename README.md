@@ -31,3 +31,25 @@ Set the 'Date' column as the index and sort the dataframe by 'Date'.
 Use the Pandas plot() function to generate a plot of the precipiation values over time.
 
 ![Image of precipitation graph](https://github.com/kellnergp/sqlalchemy-challenge/blob/main/Images/precipitation.png?raw=true)
+
+Finally, use the Pandas describe() function to print the summary statistics for the precipitation data.
+
+### Station Analysis
+
+Use a session query to determine the number of stations in the dataset by calling the 'station' column from the Station table, grouping by 'station', and using the count() function.
+
+Create a query to find the most active station by calling Station.station and func.count(Measurement.id), joining the tables on 'station', grouping by 'station', and sorting by the func.count(), descending.
+
+Save the top result's station.
+
+Query func.min(), func.max(), and func.avg() for the 'tobs' column from the Measurement table, filtering for rows where the 'station' is equal to the saved station.
+
+Using the start date from the previous section and the saved station from this section as filters, query 'tobs' data from the Measurement table.
+
+Save the results of the query into a list with a list comprehension then use the list to generate a Pandas dataframe.
+
+Use the Pandas plot().hist() function to create a graph of temperature frequency within the query results, using 12 bins.
+
+![Image of temperature frequency table](https://github.com/kellnergp/sqlalchemy-challenge/blob/main/Images/tempFrequency.png?raw=true)
+
+Close the session before continuing to the next section.
