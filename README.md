@@ -1,4 +1,25 @@
-# sqlalchemy-challenge
+# Hawaii Weather: Simulated API and Flask App
+
+## Overview
+
+This project explores the use of the SQLAlchemy and Flask Python libraries by accessing a simulated weather database API and constructing a basic dashboard app.
+
+## Tools Used
+
+Python
+
+SQLAlchemy
+
+Matplotlib Pyplot
+
+Flask
+
+# Code Walkthrough
+
+<details>
+  <summary>Click to expand!</summary>
+
+The project code consists of two primary components: a jupyter notebook running a Python3 kernel and a Python script containing instructions for a Flask App.
 
 ## Climate Analysis and Exploration
 
@@ -136,4 +157,9 @@ Query func.min(), func.avg(), and func.max() for Measurement.tobs, filtering for
 
 After the conditional statements, store the results in a list object as key-value pairs with the keys being 'TMIN', 'TAVG', and 'TMAX' and the values being the corresponding query results.
 
+  </details>
+  
+  ## Contact
+  
+  Galen Kellner: kellnergp@gmail.com
 Close the session and return the list in jsonified form.
