@@ -162,10 +162,12 @@ Within an else statement, convert start to a datetime object with the format '%Y
 Query func.min(), func.avg(), and func.max() for Measurement.tobs, filtering for Measurement.date greater than or equal to start date, and save the results as temp_results.
 
 After the conditional statements, store the results in a list object as key-value pairs with the keys being 'TMIN', 'TAVG', and 'TMAX' and the values being the corresponding query results.
+  
+  Close the session and return the list in jsonified form.
 
   </details>
   
   ## Contact
   
   Galen Kellner: kellnergp@gmail.com
-Close the session and return the list in jsonified form.
+
