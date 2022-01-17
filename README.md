@@ -1,8 +1,8 @@
-# Hawaii Weather: Simulated API and Flask App
+# Hawaii Weather: Simulated Database and Flask App
 
 ## Overview
 
-This project explores the use of the SQLAlchemy and Flask Python libraries by accessing a simulated weather database API and constructing a basic dashboard app.
+This project explores the use of the SQLAlchemy and Flask Python libraries by accessing a simulated weather database and constructing a basic dashboard app.
 
 The jupyter notebook explores the use of SQLAlchemy in accessing the 'database' and provides the templates for constructing the Flask routes.
 
